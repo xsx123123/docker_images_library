@@ -1,0 +1,5 @@
+
+Build image with the follow
+```bash
+docker build -t zj/fastq_screen:1.0.1v -f Dockerfile ./
+```

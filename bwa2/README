@@ -1,0 +1,4 @@
+Build image with dockerfile
+```bash
+docker build -t zj/bwa-mem2:1.0.2v -f Dockerfile ./
+```
