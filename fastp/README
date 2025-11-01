@@ -1,0 +1,5 @@
+
+Build image with the follow
+```bash
+docker build -t zj/fastp:1.0.2v -f Dockerfile ./
+```
