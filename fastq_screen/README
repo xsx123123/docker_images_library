@@ -1,5 +1,4 @@
-
-Build image with the follow
+Build image with dockerfile
 ```bash
 docker build -t zj/fastq_screen:1.0.1v -f Dockerfile ./
 ```

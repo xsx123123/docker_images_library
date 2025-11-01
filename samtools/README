@@ -1,0 +1,4 @@
+Build image with dockerfile
+```bash
+docker build -t zj/samtools:1.0.1v -f Dockerfile ./
+```
