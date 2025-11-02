@@ -1,20 +1,40 @@
 # Author  : JZHANG
 # Date    : 2025-11-1
-# Version : 1.0.1v (Optimized)
+# Version : 1.0.2v (Fixed Permissions)
 
 # 1) 选择轻量基底镜像
+# (默认用户是 'mambauser')
 FROM mambaorg/micromamba:1.5.10
 
-# 2) 设置工作目录
+# 2) 切换到 ROOT 用户来安装系统依赖
+# ----------------------------------------------------
+USER root
+# ----------------------------------------------------
+
+# 3) 设置工作目录 & UPDATE (现在以 root 身份运行)
 SHELL ["/bin/bash", "-lc"]
 WORKDIR /opt
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        procps \
+        bash \
+        coreutils \
+        gawk \
+        ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
-# 3) 创建环境并安装
+# 4) 切换回 mambauser 来创建环境
+# (Micromamba 的 /opt/conda 目录归 mambauser 所有)
+# ----------------------------------------------------
+USER mambauser
+# ----------------------------------------------------
+# 5) 创建环境并安装 (现在以 mambauser 身份运行)
 RUN micromamba create -y -n fastqc_env -c conda-forge -c bioconda fastqc=0.12.1 && \
     micromamba clean -a -y
 
-# 4) 添加环境变量
+# 6) 添加环境变量
+# (ENV 指令不受 USER 切换的影响)
 ENV PATH=/opt/conda/envs/fastqc_env/bin:$PATH
 
-# 5) 设置默认命令 
+# 7) 设置默认命令 
 CMD ["fastqc", "--version"]
